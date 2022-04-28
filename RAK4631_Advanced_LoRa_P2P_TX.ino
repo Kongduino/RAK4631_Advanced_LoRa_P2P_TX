@@ -131,7 +131,7 @@ void loop() {
 void OnTxDone(void) {
   float timing = (millis() - startMillis) / 1000.0;
   Serial.printf(". Done! Time: %.3f ms.\n", timing);
-  delay(4000);
+  delay(2000);
   send();
 }
 
@@ -145,8 +145,8 @@ void send() {
   SX126xWriteRegister(0x08e7, OCP_value);
   uint8_t mA = OCP_value * 2.5;
   Serial.printf("Sending 64 bytes at OCP_value: 0x%2x, ie %d mA", OCP_value, mA);
-  if (OCP_value == 0x18) OCP_value = 0x38;
-  else OCP_value = 0x18;
+  OCP_value += 4;
+  if (OCP_value > 0x38) OCP_value = 0x18;
   startMillis = millis();
   Radio.Send(TxdBuffer, 64);
 }
